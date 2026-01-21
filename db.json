@@ -1,0 +1,11 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Setup project",
+      "description": "Initial structure",
+      "status": "done",
+      "createdAt": "2024-01-01"
+    }
+  ]
+}
