@@ -1,10 +1,12 @@
 export type TaskStatus = "todo" | "in-progress" | "done";
 import React from "react";
 
-export interface Task {
+export type Task = {
   id: number;
   title: string;
-  description?: string;
-  status: TaskStatus;
-  createdAt: string;
-}
+  completed: boolean;
+};
+
+export type TaskCreate = {
+  title: string;
+};
