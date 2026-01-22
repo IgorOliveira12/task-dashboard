@@ -1,5 +1,7 @@
 import React from "react";
 import { useTasks } from "../hooks/use-tasks";
+import TaskItem from "../components/task/task-item";
+
 
 export default function Tasks() {
   const { tasks, loading, error, addTask, removeTask, editTask } = useTasks();
@@ -15,20 +17,12 @@ export default function Tasks() {
 
       <ul>
         {tasks.map(task => (
-          <li key={task.id}>
-            {task.title}{" "}
-            <button onClick={() => removeTask(task.id)}>X</button>{" "}
-            <button
-              onClick={() => {
-                const newTitle = prompt("New title?", task.title);
-                if (newTitle && newTitle.trim()) {
-                  editTask(task.id, newTitle.trim());
-                }
-              }}
-            >
-              Rename
-            </button>
-          </li>
+          <TaskItem
+            key={task.id}
+            task={task}
+            onDelete={removeTask}
+            onEdit={editTask}
+          />
         ))}
       </ul>
     </div>
