@@ -2,10 +2,13 @@
   "tasks": [
     {
       "id": 1,
-      "title": "Setup project",
-      "description": "Initial structure",
-      "status": "done",
-      "createdAt": "2024-01-01"
+      "title": "Primeira task",
+      "completed": false
+    },
+    {
+      "id": 2,
+      "title": "Segunda task",
+      "completed": true
     }
   ]
 }
