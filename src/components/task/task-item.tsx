@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import type { Task } from "../../types/task";
 
+
 type Props = {
   task: Task;
   onDelete: (id: number) => void;
@@ -39,11 +40,13 @@ export default function TaskItem({ task, onDelete, onEdit }: Props) {
     setIsEditing(false);
   }
 
-  return (
-    <li>
-      {isEditing ? (
+    return (
+        <li className="task-item">
+        <div className="task-item__left">
+        {isEditing ? (
         <input
           ref={inputRef}
+          className="input"
           value={value}
           onChange={e => setValue(e.target.value)}
           onBlur={save}
@@ -53,12 +56,17 @@ export default function TaskItem({ task, onDelete, onEdit }: Props) {
           }}
         />
       ) : (
-        <span onDoubleClick={() => setIsEditing(true)} style={{ cursor: "pointer" }}>
+        <span className="task-item__title" onDoubleClick={() => setIsEditing(true)}>
           {task.title}
         </span>
       )}
+    </div>
 
-      <button onClick={() => onDelete(task.id)}>X</button>
-    </li>
-  );
+    <div className="task-item__actions">
+      <button className="btn btn--danger" onClick={() => onDelete(task.id)}>
+        Delete
+      </button>
+    </div>
+  </li>
+);
 }
