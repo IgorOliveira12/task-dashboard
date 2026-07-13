@@ -217,3 +217,56 @@ a {
     justify-content: flex-end;
   }
 }
+.task-filters {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin: 10px 0 14px;
+}
+
+.task-filters__tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.task-filters__meta {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--muted);
+  font-size: 14px;
+}
+
+@media (min-width: 720px) {
+  .task-filters {
+    grid-template-columns: 1fr 1fr auto;
+    align-items: center;
+  }
+}
+.task-form {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  max-width: 420px;
+}
+
+.task-form .input {
+  flex: 1;
+}
+
+@media (max-width: 700px) {
+  .task-form {
+    flex-direction: column;
+    max-width: 100%;
+  }
+}

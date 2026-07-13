@@ -1,9 +1,24 @@
 import React from "react";
 import { useTasks } from "../hooks/use-tasks";
 import TaskItem from "../components/task/task-item";
+import TaskFilters from "../components/task/task-filters";
+import TaskForm from "../components/task/task-form";
 
 export default function Tasks() {
-  const { tasks, loading, error, addTask, removeTask, editTask } = useTasks();
+  const {
+    tasks,
+    loading,
+    error,
+    addTask,
+    removeTask,
+    editTask,
+    setCompleted,
+    status,
+    setStatus,
+    search,
+    setSearch,
+    remainingCount,
+  } = useTasks();
 
   if (loading) return <div className="container">Loading...</div>;
   if (error) return <div className="container">{error}</div>;
@@ -14,12 +29,17 @@ export default function Tasks() {
         <div className="tasks__top">
           <h1 className="tasks__title">Tasks</h1>
 
-          <button className="btn btn--primary" 
-          onClick={() => addTask({ title: "New task" })}
-          >
-            Add task
-          </button>
-        </div>
+          <TaskForm onSubmit={addTask} />
+          </div>
+
+        <TaskFilters
+          status={status}
+          setStatus={setStatus}
+          search={search}
+          setSearch={setSearch}
+          remainingCount={remainingCount}
+        />
+        
 
         <ul className="tasks__list">
           {tasks.map(task => (
@@ -28,6 +48,7 @@ export default function Tasks() {
               task={task}
               onDelete={removeTask}
               onEdit={editTask}
+              onToggle={setCompleted}
             />
           ))}
         </ul>

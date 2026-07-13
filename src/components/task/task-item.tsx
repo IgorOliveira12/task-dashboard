@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import type { Task } from "../../types/task";
 
-
 type Props = {
   task: Task;
   onDelete: (id: number) => void;
   onEdit: (id: number, title: string) => void;
+  onToggle: (id: number, completed: boolean) => void;
 };
 
-export default function TaskItem({ task, onDelete, onEdit }: Props) {
+export default function TaskItem({ task, onDelete, onEdit, onToggle }: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState(task.title);
 
@@ -25,48 +25,60 @@ export default function TaskItem({ task, onDelete, onEdit }: Props) {
     setValue(task.title);
   }, [task.title]);
 
-  function cancel() {
+  function cancelEdit() {
     setValue(task.title);
     setIsEditing(false);
   }
 
-  function save() {
+  function saveEdit() {
     const trimmed = value.trim();
-    if (!trimmed) return cancel();
+    if (!trimmed) return cancelEdit();
 
-    if (trimmed !== task.title) {
-      onEdit(task.id, trimmed);
-    }
+    if (trimmed !== task.title) onEdit(task.id, trimmed);
     setIsEditing(false);
   }
 
-    return (
-        <li className="task-item">
-        <div className="task-item__left">
-        {isEditing ? (
+  return (
+    <li className="task-item">
+      <div className="task-item__left">
         <input
-          ref={inputRef}
-          className="input"
-          value={value}
-          onChange={e => setValue(e.target.value)}
-          onBlur={save}
-          onKeyDown={e => {
-            if (e.key === "Enter") save();
-            if (e.key === "Escape") cancel();
-          }}
+          type="checkbox"
+          checked={task.completed}
+          onChange={e => onToggle(task.id, e.target.checked)}
         />
-      ) : (
-        <span className="task-item__title" onDoubleClick={() => setIsEditing(true)}>
-          {task.title}
-        </span>
-      )}
-    </div>
 
-    <div className="task-item__actions">
-      <button className="btn btn--danger" onClick={() => onDelete(task.id)}>
-        Delete
-      </button>
-    </div>
-  </li>
-);
+        {isEditing ? (
+          <input
+            ref={inputRef}
+            className="input"
+            value={value}
+            onChange={e => setValue(e.target.value)}
+            onBlur={saveEdit}
+            onKeyDown={e => {
+              if (e.key === "Enter") saveEdit();
+              if (e.key === "Escape") cancelEdit();
+            }}
+          />
+        ) : (
+          <span
+            className="task-item__title"
+            onDoubleClick={() => setIsEditing(true)}
+            style={{
+              textDecoration: task.completed ? "line-through" : "none",
+              opacity: task.completed ? 0.7 : 1,
+            }}
+            title="Double-click to edit"
+          >
+            {task.title}
+          </span>
+        )}
+      </div>
+
+      <div className="task-item__actions">
+        <button className="btn btn--danger" onClick={() => onDelete(task.id)}>
+          Delete
+        </button>
+      </div>
+    </li>
+  );
 }

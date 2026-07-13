@@ -1,6 +1,3 @@
-console.log("TASK SERVICE LOADED ✅");
-
-
 import type { Task, TaskCreate } from "../types/task";
 
 const API_URL = "http://localhost:3001/tasks";
@@ -12,11 +9,14 @@ export async function getTasks(): Promise<Task[]> {
 }
 
 export async function createTask(data: TaskCreate): Promise<Task> {
+  const payload = { ...data, completed: false };
+
   const res = await fetch(API_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ title: data.title, completed: false }),
+    body: JSON.stringify(payload),
   });
+
   if (!res.ok) throw new Error("Failed to create task");
   return res.json();
 }
@@ -25,6 +25,7 @@ export async function deleteTask(id: number): Promise<void> {
   const res = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
   if (!res.ok) throw new Error("Failed to delete task");
 }
+
 export async function updateTask(
   id: number,
   patch: Partial<Omit<Task, "id">>
@@ -39,4 +40,3 @@ export async function updateTask(
   return res.json();
 }
 
-console.log("EXPORTS CHECK ✅", { getTasks, createTask, deleteTask });
