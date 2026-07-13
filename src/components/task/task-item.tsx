@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import type { Task } from "../../types/task";
+import { Link } from "react-router-dom";
 
 type Props = {
   task: Task;
@@ -39,46 +40,48 @@ export default function TaskItem({ task, onDelete, onEdit, onToggle }: Props) {
   }
 
   return (
-    <li className="task-item">
-      <div className="task-item__left">
+  <li className="task-item">
+    <div className="task-item__left">
+      <input
+        type="checkbox"
+        checked={task.completed}
+        onChange={(e) => onToggle(task.id, e.target.checked)}
+      />
+
+      {isEditing ? (
         <input
-          type="checkbox"
-          checked={task.completed}
-          onChange={e => onToggle(task.id, e.target.checked)}
+          ref={inputRef}
+          className="input"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          onBlur={saveEdit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") saveEdit();
+            if (e.key === "Escape") cancelEdit();
+          }}
         />
+      ) : (
+        <Link
+          to={`/tasks/${task.id}`}
+          className="task-item__title"
+          style={{
+            textDecoration: task.completed ? "line-through" : "none",
+            opacity: task.completed ? 0.7 : 1,
+          }}
+        >
+          {task.title}
+        </Link>
+      )}
+    </div>
 
-        {isEditing ? (
-          <input
-            ref={inputRef}
-            className="input"
-            value={value}
-            onChange={e => setValue(e.target.value)}
-            onBlur={saveEdit}
-            onKeyDown={e => {
-              if (e.key === "Enter") saveEdit();
-              if (e.key === "Escape") cancelEdit();
-            }}
-          />
-        ) : (
-          <span
-            className="task-item__title"
-            onDoubleClick={() => setIsEditing(true)}
-            style={{
-              textDecoration: task.completed ? "line-through" : "none",
-              opacity: task.completed ? 0.7 : 1,
-            }}
-            title="Double-click to edit"
-          >
-            {task.title}
-          </span>
-        )}
-      </div>
-
-      <div className="task-item__actions">
-        <button className="btn btn--danger" onClick={() => onDelete(task.id)}>
-          Delete
-        </button>
-      </div>
-    </li>
+    <div className="task-item__actions">
+      <button
+        className="btn btn--danger"
+        onClick={() => onDelete(task.id)}
+      >
+        Delete
+      </button>
+    </div>
+  </li>
   );
 }
